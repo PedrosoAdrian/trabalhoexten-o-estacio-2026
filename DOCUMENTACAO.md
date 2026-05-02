@@ -1,7 +1,7 @@
 # Documentação Técnica — ObrasTrack
 
 > **App mobile para gestão de obras de empreiteiros**  
-> Aluno: Adrian Lopes Cavalcanti | Parceiro: Concept Parede Pronta Ltda
+> Aluno: Adrian Luiz Pedroso | Parceiro: Concept Parede Pronta Ltda
 
 ---
 
@@ -429,7 +429,7 @@ yarn test
 yarn test:coverage
 ```
 
-### O que é testado
+### O que é testado      
 
 Os testes cobrem a **camada de services** — a lógica de negócio que não depende de interface gráfica. O Firebase é substituído por **mocks** (objetos falsos controlados) durante os testes.
 

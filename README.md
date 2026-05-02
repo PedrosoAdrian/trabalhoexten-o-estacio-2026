@@ -90,7 +90,7 @@ Escaneie o QR Code com o app Expo Go.
 
 ## Autor
 
-**Adrian Lopes Cavalcanti**
+**Adrian Luiz Pedroso**
 Bacharelado em Ciência da Computação — 7º semestre
 Faculdade Estácio de Sá — Florianópolis/SC
 Período: Março a Julho de 2026
