@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, RefreshControl } from 'react-native';
 import { useAuth } from '../../contexts/AuthContext';
 import { listarObrasPorCliente } from '../../services/obraService';
+import { logout } from '../../services/authService';
 import { Obra } from '../../types';
 
 const STATUS_LABEL: Record<string, string> = {
@@ -15,13 +16,39 @@ export default function MinhasObrasScreen({ navigation }: any) {
   const { usuario } = useAuth();
   const [obras, setObras] = useState<Obra[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    if (!usuario) return;
-    listarObrasPorCliente(usuario.id).then((data) => {
-      setObras(data);
-      setLoading(false);
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={handleLogout} style={{ marginRight: 4 }}>
+          <Text style={{ color: '#fff', fontSize: 15, fontWeight: '600' }}>Sair</Text>
+        </TouchableOpacity>
+      ),
     });
+  }, []);
+
+  async function handleLogout() {
+    Alert.alert('Sair', 'Deseja realmente sair?', [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Sair', style: 'destructive', onPress: () => logout() },
+    ]);
+  }
+
+  async function carregarObras() {
+    if (!usuario) return;
+    const data = await listarObrasPorCliente(usuario.id);
+    setObras(data);
+  }
+
+  useEffect(() => {
+    carregarObras().finally(() => setLoading(false));
+  }, [usuario]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await carregarObras();
+    setRefreshing(false);
   }, [usuario]);
 
   if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#F4821F" />;
@@ -43,6 +70,14 @@ export default function MinhasObrasScreen({ navigation }: any) {
           </TouchableOpacity>
         )}
         ListEmptyComponent={<Text style={styles.empty}>Nenhuma obra associada</Text>}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#F4821F']}
+            tintColor="#F4821F"
+          />
+        }
       />
     </View>
   );

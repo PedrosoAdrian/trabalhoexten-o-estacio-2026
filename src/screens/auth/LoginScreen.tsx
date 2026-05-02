@@ -25,21 +25,28 @@ export default function LoginScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>ObrasTrack</Text>
+
+      <Text style={styles.label}>E-mail</Text>
       <TextInput
         style={styles.input}
-        placeholder="E-mail"
+        placeholder="seu@email.com"
+        placeholderTextColor="#aaa"
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
       />
+
+      <Text style={styles.label}>Senha</Text>
       <TextInput
         style={styles.input}
-        placeholder="Senha"
+        placeholder="••••••••"
+        placeholderTextColor="#aaa"
         value={senha}
         onChangeText={setSenha}
         secureTextEntry
       />
+
       <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
         <Text style={styles.buttonText}>{loading ? 'Entrando...' : 'Entrar'}</Text>
       </TouchableOpacity>
@@ -52,9 +59,18 @@ export default function LoginScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
-  title: { fontSize: 32, fontWeight: 'bold', textAlign: 'center', marginBottom: 32, color: '#F4821F' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, marginBottom: 16, fontSize: 16 },
-  button: { backgroundColor: '#F4821F', borderRadius: 8, padding: 14, alignItems: 'center', marginBottom: 16 },
+  title: { fontSize: 32, fontWeight: 'bold', textAlign: 'center', marginBottom: 40, color: '#F4821F' },
+  label: { fontSize: 14, fontWeight: '600', color: '#444', marginBottom: 6 },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 20,
+    fontSize: 16,
+    color: '#333',
+  },
+  button: { backgroundColor: '#F4821F', borderRadius: 8, padding: 14, alignItems: 'center', marginBottom: 16, marginTop: 4 },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
   link: { textAlign: 'center', color: '#F4821F', fontSize: 14 },
 });

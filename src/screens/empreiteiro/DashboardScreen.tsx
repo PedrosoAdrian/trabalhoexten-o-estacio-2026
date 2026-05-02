@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, RefreshControl } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../contexts/AuthContext';
 import { listarObrasPorEmpreiteiro } from '../../services/obraService';
+import { logout } from '../../services/authService';
 import { Obra } from '../../types';
 
 const STATUS_COLOR: Record<string, string> = {
@@ -15,13 +17,42 @@ export default function DashboardScreen({ navigation }: any) {
   const { usuario } = useAuth();
   const [obras, setObras] = useState<Obra[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    if (!usuario) return;
-    listarObrasPorEmpreiteiro(usuario.id).then((data) => {
-      setObras(data);
-      setLoading(false);
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={handleLogout} style={{ marginRight: 4 }}>
+          <Text style={{ color: '#fff', fontSize: 15, fontWeight: '600' }}>Sair</Text>
+        </TouchableOpacity>
+      ),
     });
+  }, []);
+
+  async function handleLogout() {
+    Alert.alert('Sair', 'Deseja realmente sair?', [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Sair', style: 'destructive', onPress: () => logout() },
+    ]);
+  }
+
+  async function carregarObras() {
+    if (!usuario) return;
+    const data = await listarObrasPorEmpreiteiro(usuario.id);
+    setObras(data);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      carregarObras().finally(() => setLoading(false));
+    }, [usuario])
+  );
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await carregarObras();
+    setRefreshing(false);
   }, [usuario]);
 
   if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#F4821F" />;
@@ -46,6 +77,14 @@ export default function DashboardScreen({ navigation }: any) {
           </TouchableOpacity>
         )}
         ListEmptyComponent={<Text style={styles.empty}>Nenhuma obra cadastrada</Text>}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#F4821F']}
+            tintColor="#F4821F"
+          />
+        }
       />
       <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('NovaObra')}>
         <Text style={styles.fabText}>+ Nova Obra</Text>

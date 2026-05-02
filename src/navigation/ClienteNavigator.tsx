@@ -14,7 +14,7 @@ export default function ClienteNavigator() {
         headerTitleStyle: { fontWeight: 'bold' },
       }}
     >
-      <Stack.Screen name="MinhasObras" component={MinhasObrasScreen} options={{ title: 'Minhas Obras' }} />
+      <Stack.Screen name="MinhasObras" component={MinhasObrasScreen} options={{ title: 'ObrasTrack' }} />
       <Stack.Screen name="ObraDetalhesCliente" component={ObraDetalhesClienteScreen} options={{ title: 'Detalhes da Obra' }} />
     </Stack.Navigator>
   );

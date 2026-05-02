@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {
+  View, Text, TextInput, TouchableOpacity, StyleSheet, Alert,
+  ScrollView, KeyboardAvoidingView, Platform,
+} from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { registrar } from '../../services/authService';
 import { UserType } from '../../types';
@@ -26,54 +29,72 @@ export default function RegisterScreen({ navigation }: Props) {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Criar Conta</Text>
-      <TextInput style={styles.input} placeholder="Nome" value={nome} onChangeText={setNome} />
-      <TextInput
-        style={styles.input}
-        placeholder="E-mail"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        value={senha}
-        onChangeText={setSenha}
-        secureTextEntry
-      />
-      <Text style={styles.label}>Perfil</Text>
-      <View style={styles.tipoRow}>
-        {(['empreiteiro', 'cliente'] as UserType[]).map((t) => (
-          <TouchableOpacity
-            key={t}
-            style={[styles.tipoBtn, tipo === t && styles.tipoBtnActive]}
-            onPress={() => setTipo(t)}
-          >
-            <Text style={[styles.tipoBtnText, tipo === t && styles.tipoBtnTextActive]}>
-              {t.charAt(0).toUpperCase() + t.slice(1)}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? 'Cadastrando...' : 'Cadastrar'}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text style={styles.link}>Já tem conta? Entrar</Text>
-      </TouchableOpacity>
-    </View>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+        <Text style={styles.label}>Nome completo</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: João da Silva"
+          placeholderTextColor="#aaa"
+          value={nome}
+          onChangeText={setNome}
+        />
+
+        <Text style={styles.label}>E-mail</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="seu@email.com"
+          placeholderTextColor="#aaa"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+
+        <Text style={styles.label}>Senha</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Mínimo 6 caracteres"
+          placeholderTextColor="#aaa"
+          value={senha}
+          onChangeText={setSenha}
+          secureTextEntry
+        />
+
+        <Text style={styles.label}>Perfil</Text>
+        <View style={styles.tipoRow}>
+          {(['empreiteiro', 'cliente'] as UserType[]).map((t) => (
+            <TouchableOpacity
+              key={t}
+              style={[styles.tipoBtn, tipo === t && styles.tipoBtnActive]}
+              onPress={() => setTipo(t)}
+            >
+              <Text style={[styles.tipoBtnText, tipo === t && styles.tipoBtnTextActive]}>
+                {t === 'empreiteiro' ? 'Empreiteiro' : 'Cliente'}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
+          <Text style={styles.buttonText}>{loading ? 'Cadastrando...' : 'Cadastrar'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.link}>Já tem conta? Entrar</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
-  title: { fontSize: 28, fontWeight: 'bold', textAlign: 'center', marginBottom: 32, color: '#F4821F' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, marginBottom: 16, fontSize: 16 },
-  label: { fontSize: 14, color: '#555', marginBottom: 8 },
-  tipoRow: { flexDirection: 'row', marginBottom: 20, gap: 12 },
+  container: { flexGrow: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
+  label: { fontSize: 14, fontWeight: '600', color: '#444', marginBottom: 6 },
+  input: {
+    borderWidth: 1, borderColor: '#ccc', borderRadius: 8,
+    padding: 12, marginBottom: 20, fontSize: 16, color: '#333',
+  },
+  tipoRow: { flexDirection: 'row', marginBottom: 24, gap: 12 },
   tipoBtn: { flex: 1, borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, alignItems: 'center' },
   tipoBtnActive: { borderColor: '#F4821F', backgroundColor: '#FFF3E8' },
   tipoBtnText: { color: '#555', fontSize: 15 },

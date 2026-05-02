@@ -16,6 +16,8 @@ export async function registrar(
   const { user } = await createUserWithEmailAndPassword(auth, email, senha);
   const usuario: Usuario = { id: user.uid, nome, email, tipo, obras: [] };
   await setDoc(doc(db, 'usuarios', user.uid), usuario);
+  // Mapeamento seguro: permite buscar uid por email sem expor lista de usuários
+  await setDoc(doc(db, 'emails', email), { uid: user.uid });
   return usuario;
 }
 

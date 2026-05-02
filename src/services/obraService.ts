@@ -10,7 +10,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Obra, Material, MaoDeObra } from '../types';
+import { Obra, Material, MaoDeObra, Usuario } from '../types';
 
 export async function criarObra(obra: Omit<Obra, 'id'>) {
   const ref = await addDoc(collection(db, 'obras'), obra);
@@ -48,4 +48,42 @@ export async function adicionarMaterial(obraId: string, material: Material, mate
 
 export async function adicionarMaoDeObra(obraId: string, mdo: MaoDeObra, lista: MaoDeObra[]) {
   await updateDoc(doc(db, 'obras', obraId), { maoDeObra: [...lista, mdo] });
+}
+
+export async function vincularClientePorEmail(
+  obraId: string,
+  email: string,
+  clientesIds: string[]
+): Promise<string[]> {
+  const emailSnap = await getDoc(doc(db, 'emails', email));
+  if (!emailSnap.exists()) {
+    throw new Error('Cliente não encontrado. Peça para ele se cadastrar primeiro.');
+  }
+  const { uid } = emailSnap.data() as { uid: string };
+  if (clientesIds.includes(uid)) {
+    throw new Error('Este cliente já está vinculado a esta obra.');
+  }
+  const novosIds = [...clientesIds, uid];
+  await updateDoc(doc(db, 'obras', obraId), { clientesIds: novosIds });
+  return novosIds;
+}
+
+export async function buscarClientesDaObra(clientesIds: string[]): Promise<Usuario[]> {
+  if (clientesIds.length === 0) return [];
+  const snaps = await Promise.all(
+    clientesIds.map((uid) => getDoc(doc(db, 'usuarios', uid)))
+  );
+  return snaps
+    .filter((s) => s.exists())
+    .map((s) => ({ id: s.id, ...s.data() } as Usuario));
+}
+
+export async function desvincularCliente(
+  obraId: string,
+  clienteId: string,
+  clientesIds: string[]
+): Promise<string[]> {
+  const novosIds = clientesIds.filter((id) => id !== clienteId);
+  await updateDoc(doc(db, 'obras', obraId), { clientesIds: novosIds });
+  return novosIds;
 }
