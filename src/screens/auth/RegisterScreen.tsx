@@ -79,6 +79,7 @@ export default function RegisterScreen({ navigation }: Props) {
         <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
           <Text style={styles.buttonText}>{loading ? 'Cadastrando...' : 'Cadastrar'}</Text>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.link}>Já tem conta? Entrar</Text>
         </TouchableOpacity>

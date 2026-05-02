@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {
+  View, Text, TextInput, TouchableOpacity, StyleSheet, Alert,
+} from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { login } from '../../services/authService';
 
@@ -50,6 +52,7 @@ export default function LoginScreen({ navigation }: Props) {
       <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
         <Text style={styles.buttonText}>{loading ? 'Entrando...' : 'Entrar'}</Text>
       </TouchableOpacity>
+
       <TouchableOpacity onPress={() => navigation.navigate('Register')}>
         <Text style={styles.link}>Não tem conta? Cadastre-se</Text>
       </TouchableOpacity>
@@ -62,15 +65,10 @@ const styles = StyleSheet.create({
   title: { fontSize: 32, fontWeight: 'bold', textAlign: 'center', marginBottom: 40, color: '#F4821F' },
   label: { fontSize: 14, fontWeight: '600', color: '#444', marginBottom: 6 },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 20,
-    fontSize: 16,
-    color: '#333',
+    borderWidth: 1, borderColor: '#ccc', borderRadius: 8,
+    padding: 12, marginBottom: 20, fontSize: 16, color: '#333',
   },
-  button: { backgroundColor: '#F4821F', borderRadius: 8, padding: 14, alignItems: 'center', marginBottom: 16, marginTop: 4 },
+  button: { backgroundColor: '#F4821F', borderRadius: 8, padding: 14, alignItems: 'center', marginBottom: 16 },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
   link: { textAlign: 'center', color: '#F4821F', fontSize: 14 },
 });

@@ -32,6 +32,7 @@
         "projectId": "d3355543-bf9a-47cb-a48d-ce9103da47cc"
       }
     },
-    "owner": "fernandopoerners-organization"
+    "owner": "fernandopoerners-organization",
+    "plugins": []
   }
 }
