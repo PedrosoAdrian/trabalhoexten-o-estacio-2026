@@ -6,7 +6,8 @@
       "Bash(npx expo *)",
       "Bash(npm install *)",
       "Bash(npx tsc *)",
-      "Bash(gh auth *)"
+      "Bash(gh auth *)",
+      "Bash(npm uninstall *)"
     ]
   }
 }

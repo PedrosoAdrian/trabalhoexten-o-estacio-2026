@@ -3,8 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert, TextInput,
 import { criarDemanda } from '../../services/demandaService';
 import { useAuth } from '../../contexts/AuthContext';
 import { Demanda, DemandaTipo, Obra } from '../../types';
-import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+import { generateId } from '../../utils/uuid';
 
 export default function ObraDetalhesClienteScreen({ route }: any) {
   const { usuario } = useAuth();
@@ -17,7 +16,7 @@ export default function ObraDetalhesClienteScreen({ route }: any) {
   async function handleEnviarDemanda() {
     if (!titulo || !descricao) return Alert.alert('Preencha todos os campos');
     const nova: Demanda = {
-      id: uuidv4(),
+      id: generateId(),
       titulo,
       descricao,
       tipo,
