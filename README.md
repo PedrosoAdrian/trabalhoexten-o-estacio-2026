@@ -1,6 +1,6 @@
 # ObrasTrack
 
-Aplicativo mobile para gestão de obras, desenvolvido como Trabalho de Conclusão de Curso (TCC) de Extensão — Bacharelado em Ciência da Computação, Faculdade Estácio de Sá, Florianópolis/SC.
+Aplicativo mobile para gestão de obras, desenvolvido como Trabalho de Extensão — Bacharelado em Ciência da Computação, Faculdade Estácio de Sá, Florianópolis/SC.
 
 ## Sobre o Projeto
 
