@@ -459,4 +459,4 @@ mockGetDoc.mockResolvedValue({
 
 ---
 
-*Documento gerado em Maio/2026 | Projeto ObrasTrack — TCC Adrian Lopes Cavalcanti*
+*Documento gerado em Maio/2026 | Projeto ObrasTrack K*
